@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 export default function Game() {
   const speak = (name: string) => {
     const utterance = new SpeechSynthesisUtterance(name)
@@ -10,7 +10,6 @@ export default function Game() {
     speechSynthesis.speak(utterance)
   }
 
-  // eslint-disable-next-line no-unused-vars
   const speechRecognizer = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
@@ -24,5 +23,13 @@ export default function Game() {
     }
   }
 
-  return <div>game</div>
+  useEffect(() => {
+    speechRecognizer()
+  }, [])
+
+  return (
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <h1>...</h1>
+    </div>
+  )
 }

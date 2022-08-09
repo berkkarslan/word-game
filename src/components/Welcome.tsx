@@ -9,9 +9,7 @@ export const Welcome: React.FC<Props> = ({ onStart }) => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        console.log('MediaStreamTrack muted:', stream.getAudioTracks()[0].muted)
-        // stream.removeTrack(stream.getAudioTracks()[0])
-        setMic(true)
+        setMic(!stream.getAudioTracks()[0].muted)
       })
       .catch((err) => {
         setMic(false)
