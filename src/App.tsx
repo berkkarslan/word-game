@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import Game from './components/Game'
 import { Welcome } from './components/Welcome'
+import { start } from './utils/game'
 
 function App() {
   const [game, setGame] = useState(false)
   const startGame = () => {
     setGame(true)
+    start()
   }
 
   return (

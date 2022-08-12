@@ -1,11 +1,11 @@
-import { start, knownNames, computerAnswer, userAnswer, names } from '../src/utils/game'
+import { start, history, computerAnswer, userAnswer, names } from '../src/utils/game'
 
 describe('game', () => {
   it('should start correctly', () => {
     const firstName = start()
-    expect(knownNames.length).toBe(1)
+    expect(history.length).toBe(1)
     expect(typeof firstName).toBe('string')
-    expect(knownNames.includes(firstName)).toBe(true)
+    expect(history.includes(firstName)).toBe(true)
   })
 })
 
@@ -26,20 +26,22 @@ describe('computer', () => {
 })
 
 describe('user', () => {
-  const lastWord = knownNames.at(-1)?.concat()
+  const lastWord = history.at(-1)?.concat()
   it('answers correctly', async () => {
     const answer = names.filter(
-      (name) => name.concat().at(0) === lastWord?.at(-1) && !knownNames.includes(name)
+      (name) => name.concat().at(0) === lastWord?.at(-1) && !history.includes(name)
     )[0]
     try {
-      await userAnswer(answer)
-      expect(knownNames.includes(answer)).toBe(true)
-    } catch (error) {}
+      await userAnswer()
+      expect(history.includes(answer)).toBe(true)
+    } catch (error) {
+      expect(error.success).toBe(false)
+    }
   })
 
   it('answers incorrectly', async () => {
     try {
-      await userAnswer('1232d1s13fdg21as3')
+      await userAnswer()
     } catch (error) {
       expect(error.message).toBe('Söylenen isim bulunamadı' || 'Söylenen ismi söylediniz')
     }
