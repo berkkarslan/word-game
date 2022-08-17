@@ -1,5 +1,5 @@
 /* eslint-disable prefer-promise-reject-errors */
-import { SpeechRecognizer, isListen, speak } from './webkit'
+import { SpeechRecognizer, speak } from './webkit'
 export let history: string[] = []
 export const lostGameChance = process.env.REACT_APP_DEFAULT_COMPUTER_LOST_GAME_CHANCE
   ? process.env.REACT_APP_DEFAULT_COMPUTER_LOST_GAME_CHANCE
@@ -14,7 +14,7 @@ export const userMaxResponseTime = process.env.REACT_APP_DEAFULT_USER_MAX_RESPON
 export const names = require('../names.json')
 export let userKnownedNames: string[] = []
 export let gameStatus = 'idle'
-export const listening = isListen
+export let listening = false
 export const lastWord = () => {
   return history[history.length - 1]
 }
@@ -57,13 +57,16 @@ export const userAnswer = async (): Promise<PromiseReturnType> => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     try {
+      listening = true
       const answer = await SpeechRecognizer()
+      listening = false
       const isCorrect = checkAnswerIsCorrect(answer)
       if (isCorrect.success) {
         resolve(isCorrect)
       }
       reject(isCorrect)
     } catch (error) {
+      listening = false
       gameStatus = 'lost'
       reject({
         success: false,

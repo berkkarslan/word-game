@@ -1,5 +1,4 @@
 /* eslint-disable prefer-promise-reject-errors */
-export let isListen = false
 const userMaxResponseTime: number = process.env.REACT_APP_DEAFULT_USER_MAX_RESPONSE_TIME
   ? parseInt(process.env.REACT_APP_DEAFULT_USER_MAX_RESPONSE_TIME)
   : 5000
@@ -26,7 +25,6 @@ export const SpeechRecognizer = async (): Promise<string> => {
     if (window.SpeechRecognition || window.webkitSpeechRecognition === undefined) {
       reject('Speech Recognition is not supported')
     }
-    isListen = true
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
     recognition.lang = 'tr-TR'
@@ -38,13 +36,11 @@ export const SpeechRecognizer = async (): Promise<string> => {
     recognition.onresult = (event: any) => {
       speechResult = event.results[0][0].transcript
       recognition.stop()
-      isListen = false
       resolve(speechResult.split(' ')[0].toLocaleLowerCase())
     }
 
     setTimeout(() => {
       recognition.stop()
-      isListen = false
       reject('Beklenen süre içinde cevap alınamadı')
     }, userMaxResponseTime)
   })
